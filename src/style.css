@@ -55,6 +55,49 @@ body {
     font-size: calc(min(9vw, 5.4vh));
     font-weight: bold;
 }
+#colorblind-switch {
+    cursor: pointer;
+    position: absolute;
+    right: calc(min(3vw, 1.8vh));
+    top: calc(min(4vw, 2.4vh));
+    height: calc(min(5vw, 3vh));
+}
+body:not(.colorblind) #eye-pupil {
+    stroke: gray;
+}
+body.colorblind #eye-slash {
+    stroke: gray;
+}
+
+span[match] {
+    color: white;
+    border: none;
+}
+span[match="exact"] {
+    background: limegreen;
+}
+span[match="other"] {
+    background: sandybrown;
+}
+span[match="wrong"] {
+    background: gray;
+}
+body.colorblind span[match="exact"] {
+    background: repeating-linear-gradient(
+        120deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.2) 5px,
+        transparent 7px,
+        transparent 13px
+    ), #4f1;
+}
+body.colorblind span[match="other"] {
+    background: url('wave-pattern.svg'), goldenrod;
+}
+body.colorblind span[match="wrong"] {
+    background: darkslategray;
+}
 
 #guesses {
     display: flex;
@@ -95,28 +138,15 @@ body {
     transition: 300ms;
 }
 .letter.example {
-    width: calc(min(8vw, 4.8vh));
-    height: calc(min(8vw, 4.8vh));
+    width: calc(min(10vw, 6vh));
+    height: calc(min(10vw, 6vh));
     margin: calc(min(0.5vw, 0.4vh)) 0 calc(max(-0.5vw, -0.4vh)) 0;
     font-size: calc(min(5vw, 3vh));
     font-weight: bold;
     transition: 600ms;
 }
-.letter.full {
+.letter.typed {
     border: 2px solid gray;
-}
-.letter.exact, .letter.other, .letter.wrong {
-    color: white;
-    border: none;
-}
-.letter.exact {
-    background-color: limegreen;
-}
-.letter.other {
-    background-color: sandybrown;
-}
-.letter.wrong {
-    background-color: gray;
 }
 
 #keyboard {
@@ -139,18 +169,6 @@ body {
     justify-content: center;
     font-size: calc(min(5vw, 3vh));
     font-weight: bold;
-}
-.key[match="exact"], .key[match="other"], .key[match="wrong"] {
-    color: white;
-}
-.key[match="exact"] {
-    background-color: limegreen;
-}
-.key[match="other"] {
-    background-color: sandybrown;
-}
-.key[match="wrong"] {
-    background-color: gray;
 }
 .key.wide {
     width: calc(min(18vw, 10.8vh));

@@ -151,6 +151,14 @@ function show_success_screen() {
     set_modal_state();
 }
 
+function switch_colorblind_mode() {
+    if (document.body.classList.contains('colorblind'))
+        document.body.classList.remove('colorblind');
+    else
+        document.body.classList.add('colorblind');
+    save_to_local_storage();
+}
+
 let showed_failure_popup = false;
 function copy_result(event) {
     event.stopPropagation();
@@ -211,7 +219,7 @@ function type_letter(letter) {
     for (let i = 1; i <= 5; i++) {
         const elt = document.getElementById(`letter-${row}-${i}`);
         if (elt.innerText === '') {
-            elt.classList.add('full');
+            elt.classList.add('typed');
             if (i === 5 && FINALED_LETTERS.hasOwnProperty(letter)) {
                 let previous = '';
                 for (let j = 1; j <= 4; j++)
@@ -233,7 +241,7 @@ function erase_letter() {
     for (let i = 5; i >= 1; i--) {
         const elt = document.getElementById(`letter-${row}-${i}`);
         if (elt.innerText !== '') {
-            elt.classList.remove('full');
+            elt.classList.remove('typed');
             elt.innerText = '';
             break;
         }
@@ -266,8 +274,8 @@ function make_guess() {
     const matches = get_matches(guess, word_of_the_day);
     for (let i = 1; i <= 5; i++) {
         const elt = document.getElementById(`letter-${row}-${i}`);
-        elt.classList.remove('full');
-        elt.classList.add(matches[i-1]);
+        elt.classList.remove('typed');
+        elt.setAttribute('match', matches[i-1]);
     }
     guesses.push(guess);
     save_to_local_storage();
@@ -309,7 +317,7 @@ function set_keyboard_key_colors() {
         }
     }
     for (const elt of document.getElementsByClassName('key'))
-        if (!elt.classList.contains('wide'))
+        if (letter_states.hasOwnProperty(elt.innerText))
             elt.setAttribute('match', letter_states[elt.innerText]);
 }
 
@@ -337,6 +345,7 @@ function handle_on_screen_keyboard_click(event) {
 function save_to_local_storage() {
     localStorage.setItem('date', today);
     localStorage.setItem('guesses', JSON.stringify(guesses));
+    localStorage.setItem('colorblind', document.body.classList.contains('colorblind') ? 'yes' : 'no');
 }
 
 function add_result_to_local_storage() {
@@ -350,6 +359,8 @@ function add_result_to_local_storage() {
 }
 
 function load_from_local_storage() {
+    if (localStorage.getItem('colorblind') === 'yes')
+        document.body.classList.add('colorblind');
     const date = localStorage.getItem('date');
     if (!date) {
         show_help();
@@ -366,7 +377,7 @@ function load_from_local_storage() {
         const matches = get_matches(guess, word_of_the_day);
         for (let j = 0; j < 5; j++) {
             const elt = document.getElementById(`letter-${i+1}-${j+1}`);
-            elt.classList.add(matches[j]);
+            elt.setAttribute('match', matches[j]);
             elt.innerText = guess[j];
         }
     }
@@ -380,6 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
     load_from_local_storage();
     save_to_local_storage();
     document.getElementById('help-button').addEventListener('click', show_help);
+    document.getElementById('colorblind-switch').addEventListener('click', switch_colorblind_mode);
     document.getElementById('share-button').addEventListener('click', copy_result);
     document.getElementById('modal').addEventListener('click', hide_modal);
     document.body.addEventListener('keydown', function(event) {
