@@ -7,7 +7,7 @@ words.update(line.strip() for line in open('hspell-shemp.txt'))
 
 freqs = {w: int(c) for w, c in csv.reader(open('cc100.csv')) if len(w) == 5}
 
-past_meduyakot = ['כימאי', 'מעטפת', 'נקיות', 'חיסון', 'שתיקה', 'מבואר', 'יתגלה', 'רשאים', 'הוביל']
+past_meduyakot = ['כימאי', 'מעטפת', 'נקיות', 'חיסון', 'שתיקה', 'מבואר', 'יתגלה', 'רשאים']
 missing_words = ['כורסא', 'ארצני' ,'משטור', 'עקידה', 'מושלם', 'כאילו']
 
 words.update(past_meduyakot)
