@@ -17,18 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-function cyrb53(str) {
-    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
-    for (let i = 0, ch; i < str.length; i++) {
-        ch = str.charCodeAt(i);
-        h1 = Math.imul(h1 ^ ch, 2654435761);
-        h2 = Math.imul(h2 ^ ch, 1597334677);
-    }
-    h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-    h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-    return 4294967296 * (2097151 & h2) + (h1>>>0);
-};
-
 function get_date() {
     return new Date().toLocaleDateString('he-IL', {timeZone: 'Asia/Jerusalem'});
 }
@@ -45,18 +33,7 @@ const HEBREW_KEYMAP = {
 const FINAL_LETTERS = {'ך': 'כ', 'ם': 'מ', 'ן': 'נ', 'ף': 'פ', 'ץ': 'צ'};
 const FINALED_LETTERS = {'כ': 'ך', 'מ': 'ם', 'נ': 'ן', 'פ': 'ף', 'צ': 'ץ'};
 const today = get_date();
-const word_of_the_day =
-    today === '15.1.2022' ? 'כימאי' :
-    today === '16.1.2022' ? 'מעטפת' :
-    today === '17.1.2022' ? 'נקיות' :
-    today === '18.1.2022' ? 'חיסון' :
-    today === '19.1.2022' ? 'שתיקה' :
-    today === '20.1.2022' ? 'מבואר' :
-    today === '21.1.2022' ? 'יתגלה' :
-    today === '22.1.2022' ? 'רשאים' :
-    today === '23.1.2022' ? 'הוביל' :
-    today === '24.1.2022' ? 'זינוק' :
-    FREQUENT_WORDS[cyrb53('meduyeket ' + today) % FREQUENT_WORDS.length];
+const word_of_the_day = calculate_meduyeket(today);
 let guesses = [];
 
 
@@ -224,7 +201,7 @@ function type_letter(letter) {
                 let previous = '';
                 for (let j = 1; j <= 4; j++)
                     previous += document.getElementById(`letter-${row}-${j}`).innerText;
-                if (WORDS.indexOf(previous + letter) !== -1)
+                if (WORDS.has(previous + letter))
                     elt.innerText = letter;
                 else
                     elt.innerText = FINALED_LETTERS[letter];
@@ -263,7 +240,7 @@ function make_guess() {
         popup('אין מספיק אותיות');
         return;
     }
-    if (WORDS.indexOf(guess) === -1) {
+    if (!WORDS.has(guess)) {
         const row_elt = document.getElementById(`guess-${row}`);
         row_elt.classList.add('jiggle');
         window.setTimeout(function() {row_elt.classList.remove('jiggle');}, 2000);
