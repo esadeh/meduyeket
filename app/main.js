@@ -369,6 +369,8 @@ function load_from_local_storage() {
     if (date !== today) {
         localStorage.removeItem('date');
         localStorage.removeItem('guesses');
+        if (history.state === 'success')
+            history.back();
         return;
     }
     guesses = JSON.parse(localStorage.getItem('guesses'));
