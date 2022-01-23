@@ -89,22 +89,13 @@ function set_modal_state() {
             document.getElementById('help-screen').classList.remove('hidden');
             document.getElementById('help-screen').scrollTop = 0;
             document.getElementById('success-screen').classList.add('hidden');
-            document.getElementById('popup').classList.add('hidden');
             break;
 
         case 'success':
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('help-screen').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
-            if (guesses[guesses.length - 1] === word_of_the_day) {
-                document.getElementById('success-header').innerText = 'כל הכבוד!';
-            } else {
-                document.getElementById('success-header').innerText = 'לא הצליח הפעם';
-                document.getElementById('popup').innerText = word_of_the_day;
-                document.getElementById('popup').classList.remove('hidden');
-            }
-
-            document.getElementById('result').innerHTML = create_result();
+            fill_success_details();
             countdown();
             break;
 
@@ -152,6 +143,40 @@ function copy_result(event) {
                 popup('לא עבד, נסו לסמן את הטקסט ולהעתיק ידנית');
             }
         });
+}
+
+function fill_success_details() {
+    if (guesses[guesses.length - 1] === word_of_the_day) {
+        document.getElementById('success-header').innerText = 'כל הכבוד!';
+        document.getElementById('spoiler').classList.add('hidden');
+    } else {
+        document.getElementById('success-header').innerText = 'לא הצליח הפעם';
+        document.getElementById('spoiler').classList.remove('hidden');
+        document.getElementById('spoiler-word').innerText = word_of_the_day;
+    }
+
+    document.getElementById('result').innerHTML = create_result();
+
+    const all_results = JSON.parse(localStorage.getItem('results'));
+    if (all_results.length < 2) {
+        document.getElementById('statistics').classList.add('hidden');
+        return;
+    }
+
+    document.getElementById('stats-games').innerText = all_results.length;
+    let wins = 0, streak = 0, max_streak = 0;
+    for (const result of all_results) {
+        if (result === 'X') {
+            streak = 0;
+        } else {
+            wins++;
+            streak++;
+            max_streak = Math.max(streak, max_streak);
+        }
+    }
+    document.getElementById('stats-success').innerText = Math.round(100 * wins / all_results.length);
+    document.getElementById('stats-streak').innerText = streak;
+    document.getElementById('stats-max-streak').innerText = max_streak;
 }
 
 function countdown() {
@@ -272,8 +297,6 @@ function make_guess() {
         window.setTimeout(set_keyboard_key_colors, 100);
         if (guesses.length === 6) {
             add_result_to_local_storage();
-            document.getElementById('popup').classList.remove('hidden');
-            document.getElementById('popup').innerText = word_of_the_day;
             window.setTimeout(show_success_screen, 2000);
         }
     }
