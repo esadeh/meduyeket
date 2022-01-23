@@ -366,6 +366,18 @@ function load_from_local_storage() {
     set_keyboard_key_colors();
 }
 
+let previous_adapt_ts = null;
+function adapt_to_window_size() {
+    window.requestAnimationFrame(function (ts) {
+        if (ts === previous_adapt_ts)
+            return;
+
+        const unit = Math.min(0.01 * window.innerWidth, 0.006 * window.innerHeight);
+        document.documentElement.style.setProperty('--unit', `${unit}px`);
+        previous_adapt_ts = ts;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     load_from_local_storage();
     save_to_local_storage();
@@ -388,4 +400,6 @@ document.addEventListener('DOMContentLoaded', function () {
         elt.addEventListener('click', handle_on_screen_keyboard_click);
     set_modal_state();
     window.addEventListener('popstate', set_modal_state);
+    adapt_to_window_size();
+    window.addEventListener('resize', adapt_to_window_size);
 });

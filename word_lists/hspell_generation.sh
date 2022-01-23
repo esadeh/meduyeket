@@ -11,6 +11,7 @@ for f in nouns.hif shemp.hif
   do
     iconv -f windows-1255 $f | grep -v '^#' | grep -v ',סמיכות' | cut -d, -f1 | egrep '^[א-תךםןףץ]{5} ' | cut -d' ' -f1 >> /meduyeket/word_lists/hspell-nouns.txt
     iconv -f windows-1255 $f | grep -v '^#' | grep -v ',סמיכות' | grep -v ',של/' | cut -d, -f1 | egrep '^[א-תךםןףץ]{5} ' | cut -d' ' -f1 >> /meduyeket/word_lists/hspell-easy-nouns.txt
+    iconv -f windows-1255 $f | grep '^[א-תךםןףץ]י[א-תךםןףץ][א-תךםןףץ]ון' | grep -v ',סמיכות' | cut -b 1-2,5-12 >> /meduyeket/word_lists/hspell-kitalon.txt
 done
 for f in extrawords.hif milot.hif biza-nouns.hif
   do

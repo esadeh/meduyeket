@@ -6,6 +6,7 @@ easy_words, all_words = set(), set()
 all_words.update(line.strip() for line in open('hspell-nouns.txt'))
 all_words.update(line.strip() for line in open('hspell-verbs.txt'))
 all_words.update(line.strip() for line in open('hspell-other.txt'))
+all_words.update(line.strip() for line in open('hspell-kitalon.txt'))
 
 easy_words.update(line.strip() for line in open('hspell-easy-nouns.txt'))
 easy_words.update(line.strip() for line in open('hspell-easy-verbs.txt'))
