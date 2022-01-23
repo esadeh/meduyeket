@@ -142,6 +142,7 @@ function copy_result(event) {
                 showed_failure_popup = true;
                 popup('לא עבד, נסו לסמן את הטקסט ולהעתיק ידנית');
             }
+            window.getSelection().selectAllChildren(document.getElementById('result'));
         });
 }
 

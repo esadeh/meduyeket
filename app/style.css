@@ -288,6 +288,7 @@ h2 {
     align-items: center;
     padding: calc(3 * var(--unit));
     border-radius: calc(2 * var(--unit));
+    cursor: pointer;
 }
 #share-button-text {
     flex-grow: 1;
