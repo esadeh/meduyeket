@@ -96,8 +96,13 @@ function set_modal_state() {
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('help-screen').classList.add('hidden');
             document.getElementById('success-screen').classList.remove('hidden');
-            document.getElementById('success-header').innerText =
-                guesses[guesses.length - 1] === word_of_the_day ? 'כל הכבוד!' : 'לא הצליח הפעם';
+            if (guesses[guesses.length - 1] === word_of_the_day) {
+                document.getElementById('success-header').innerText = 'כל הכבוד!';
+            } else {
+                document.getElementById('success-header').innerText = 'לא הצליח הפעם';
+                document.getElementById('popup').innerText = word_of_the_day;
+                document.getElementById('popup').classList.remove('hidden');
+            }
 
             document.getElementById('result').innerHTML = create_result();
             countdown();
