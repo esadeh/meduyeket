@@ -23,6 +23,7 @@ for f in verbs.hif biza-verbs.hif
   do
     iconv -f windows-1255 $f | grep -v '^#' | grep -v ',סמיכות' | grep -v ',כינוי/' | egrep '^[א-תךםןףץ]{5} ' | cut -d' ' -f1 >> /meduyeket/word_lists/hspell-verbs.txt
     iconv -f windows-1255 $f | grep -v '^#' | grep -v ',סמיכות' | grep -v ',כינוי/' | grep -v ',ציווי' | grep -v ',את' | egrep '^[א-תךםןףץ]{5} ' | cut -d' ' -f1 >> /meduyeket/word_lists/hspell-easy-verbs.txt
+    iconv -f windows-1255 $f | grep -v '^#' | grep -v ',כינוי/' | egrep '^L[א-תךםןףץ]{4} ' | cut -d' ' -f1 >> /meduyeket/word_lists/hspell-makor.txt
 done
 
 wc -l /meduyeket/word_lists/hspell-*.txt
