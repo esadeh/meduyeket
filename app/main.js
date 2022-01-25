@@ -135,7 +135,7 @@ function switch_colorblind_mode() {
 let showed_failure_popup = false;
 function copy_result(event) {
     event.stopPropagation();
-    navigator.clipboard.writeText(create_result())
+    navigator.clipboard.writeText(`${create_result()}\n\nhttps://meduyeket.net`)
         .then(function() {popup('התוצאה הועתקה, אפשר להדביק עם Ctrl+V');})
         .catch(function() {
             if (!showed_failure_popup || event.target.id !== 'result') {
